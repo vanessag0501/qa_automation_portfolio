@@ -1,0 +1,8 @@
+TEST SUMMARY — test report
+Total test cases : 14
+Passed           : 5
+Failed           : 4
+Blocked          : 3
+Skipped          : 2
+Pass rate        : 35.7%
+Verdict          : NOT READY — TOO MANY FAILURES
