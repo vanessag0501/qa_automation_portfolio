@@ -14,7 +14,7 @@ print(test_case["id"]) #TC-001
 print(test_case["status"])
 
 #Safe access with get() - returns None if key doesn't exist instead of error
-print(test_case.get("envrionment")) #None
+print(test_case.get("environment")) #None
 print(test_case.get("environment", "N/A")) #N/A - default value if key not found
 
 #Adding and updating 
