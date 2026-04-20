@@ -1,3 +1,0 @@
-QA Automation Study Log 
-Day 7 - files and CSV
-Status: In progress 

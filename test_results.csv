@@ -1,6 +1,0 @@
-TC ID,Title,Status,Priority
-TC-001,Valid login,Pass,High
-TC-002,Invalid password,Fail,High
-TC-003,Empty fields,Pass,Medium
-TC-004,Duplicate email,Pass,High
-TC-005,Password strength,Blocked,Low
