@@ -1,4 +1,4 @@
-#day 2 - variabels and data types
+#day 2 - variables and data types
 
 #strings
 test_id = "TC-001"
