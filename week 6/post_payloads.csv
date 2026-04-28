@@ -1,0 +1,4 @@
+title,user_id,expected_status
+QA Test Post 1,1,201
+QA Test Post 2,2,201
+QA Test Post 3,3,201
