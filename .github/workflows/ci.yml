@@ -1,0 +1,46 @@
+# .github/workflows/ci.yml
+
+name: QA Automation CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  api-tests:
+    name: API Test Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          pip install requests pytest pytest-html
+
+      - name: Run Week 5 API tests
+        run: |
+          cd week5
+          python -m pytest test_posts_api.py -v --html=report.html --self-contained-html
+
+      - name: Run Week 6 API tests
+        run: |
+          cd week6
+          python -m pytest test_suite.py -v --html=report.html --self-contained-html
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports
+          path: |
+            week5/report.html
+            week6/report.html
