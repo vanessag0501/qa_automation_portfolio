@@ -28,12 +28,12 @@ jobs:
 
       - name: Run Week 5 API tests
         run: |
-          cd week 5
+          cd week5
           python -m pytest test_posts_api.py -v --html=report.html --self-contained-html
 
       - name: Run Week 6 API tests
         run: |
-          cd week 6
+          cd week6
           python -m pytest test_suite.py -v --html=report.html --self-contained-html
 
       - name: Upload test reports
@@ -42,5 +42,5 @@ jobs:
         with:
           name: test-reports
           path: |
-            week 5/report.html
-            week 6/report.html
+            week5/report.html
+            week6/report.html
