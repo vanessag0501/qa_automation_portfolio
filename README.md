@@ -89,4 +89,4 @@ building toward a full automation engineering skill set. This portfolio
 represents real, runnable code written as part of a structured self-study
 program.
 
-[LinkedIn](https://linkedin.com/in/yourprofile) · [GitHub](https://github.com/vanessag0501)
+[LinkedIn](https://www.linkedin.com/in/vanessa-garcia-ab090314b/) · [GitHub](https://github.com/vanessag0501)
