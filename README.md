@@ -1,4 +1,5 @@
 ![CI](https://github.com/vanessag0501/qa_automation_portfolio/actions/workflows/ci.yml/badge.svg)
+![Playwright Tests](https://github.com/vanessag0501/qa_automation_portfolio/actions/workflows/playwright.yml/badge.svg)
 
 # QA Automation Portfolio
 
