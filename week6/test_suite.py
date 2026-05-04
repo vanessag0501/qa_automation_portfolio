@@ -76,14 +76,14 @@ def test_schema_validation(base_url):
 # ── Parametrized tests ────────────────────────────────────────────────
 @pytest.mark.parametrize("post_id", [1, 5, 10, 50, 100])
 def test_multiple_posts(base_url, post_id):
-    response = requests.get(f"{base_urll}/posts/{post_id}")
+    response = requests.get(f"{base_url}/posts/{post_id}")
     assert response.status_code == 200
     assert response.json()["id"] == post_id
 
 
 # ── Chained test ──────────────────────────────────────────────────────
 def test_user_posts_chain(base_url):
-    user = requests.get(f"{base_urll}/users/1").json()
+    user = requests.get(f"{base_url}/users/1").json()
     posts = requests.get(
         f"{base_url}/posts",
         params={"userId": user["id"]}
