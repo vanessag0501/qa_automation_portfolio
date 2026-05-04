@@ -26,7 +26,7 @@ jobs:
           playwright install --with-deps chromium
 
       - name: Run Playwright tests
-        run: pytest week4/ week5/ week6/ --tb=short --ignore=week5/day21_first_api.test.py
+        run: pytest week4/ week5/ week6/ --tb=short
 
       - name: Upload test results
         if: always()

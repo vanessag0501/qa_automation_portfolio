@@ -2,7 +2,7 @@
 
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'week3'))
-from pages.text_box_page import TextBoxPage
+from week4.pages.text_box_page import TextBoxPage
 
 
 def test_valid_submission(page):

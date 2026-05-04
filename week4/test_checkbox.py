@@ -1,6 +1,6 @@
 # week4/test_checkbox.py
 
-from pages.checkbox_page import CheckboxPage
+from week4.pages.checkbox_page import CheckboxPage
 
 
 def test_downloads_checkbox(page):
