@@ -1,0 +1,207 @@
+{
+  "info": {
+    "_postman_id": "8c61bcaf-c5eb-4ce1-97b1-fbb30471113d",
+    "name": "JSONPlaceholder API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "47601034",
+    "_collection_link": "https://go.postman.co/collection/47601034-8c61bcaf-c5eb-4ce1-97b1-fbb30471113d?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get All Posts",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response is an array\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Returns 100 posts\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.length).to.eql(100);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"First post has required fields\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json[0]).to.have.property(\"id\");\r",
+              "    pm.expect(json[0]).to.have.property(\"title\");\r",
+              "    pm.expect(json[0]).to.have.property(\"body\");\r",
+              "    pm.expect(json[0]).to.have.property(\"userId\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is under 2000ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/posts",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "posts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Single Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Returns correct post id\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.id).to.eql(1);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Post belongs to a user\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.userId).to.be.a(\"number\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Title is not empty\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.title).to.not.be.empty;\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/posts/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "posts",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response contains new post id\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.id).to.eql(101);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Title matches what was sent\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.title).to.eql(\"QA Test Post\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"userId is correct\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.userId).to.eql(1);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"title\": \"QA Test Post\",\r\n    \"body\": \"This is a test post created by Postman\",\r\n    \"userId\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/posts",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "posts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response body is empty object\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json).to.eql({});\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/posts/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "posts",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
