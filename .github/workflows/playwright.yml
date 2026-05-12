@@ -37,3 +37,17 @@ jobs:
             test-results/
             playwright-report/
           retention-days: 7
+  
+  newman:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run Newman collection
+        run: newman run week8/jsonplaceholder_collection.json -e week8/jsonplaceholder_env.json
+        
