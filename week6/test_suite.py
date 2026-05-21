@@ -5,6 +5,7 @@ import pytest
 import csv
 
 # ── Auth tests ────────────────────────────────────────────────────────
+@pytest.mark.regression
 def test_bearer_auth(http_url, auth_headers):
     response = requests.get(f"{http_url}/headers", headers=auth_headers)
     assert response.status_code == 200
@@ -30,12 +31,13 @@ def test_basic_auth_fail(http_url):
 
 
 # ── CRUD tests ────────────────────────────────────────────────────────
+@pytest.mark.smoke
 def test_get_post(base_url):
     response = requests.get(f"{base_url}/posts/1")
     assert response.status_code == 200
     assert response.json()["id"] == 1
 
-
+@pytest.mark.smoke
 def test_create_post(base_url, post_payload):
     response = requests.post(f"{base_url}/posts", json=post_payload)
     assert response.status_code == 201
@@ -55,7 +57,7 @@ def test_delete_post(base_url):
     response = requests.delete(f"{base_url}/posts/1")
     assert response.status_code == 200
 
-
+@pytest.mark.smoke
 def test_not_found(base_url):
     response = requests.get(f"{base_url}/posts/9999")
     assert response.status_code == 404
@@ -96,3 +98,13 @@ def test_user_posts_chain(base_url):
     assert len(comments) > 0
     for c in comments:
         assert "email" in c
+
+@pytest.mark.parametrize("post_id,expected_status", [
+    (1, 200),
+    (50, 200),
+    (100, 200),
+    (9999, 404)
+], ids=["first-post", "mid-post", "last-post", "invalid-post"])
+def test_get_post_status(api_client, base_url, post_id, expected_status):
+    response = api_client.get(f"{base_url}/posts/{post_id}")
+    assert response.status_code == expected_status, f"Expected status code {expected_status} but got {response.status_code} for post ID {post_id}"

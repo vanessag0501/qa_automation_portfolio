@@ -1,8 +1,10 @@
 # week4/test_checkbox.py
 
+import pytest
+
 from week4.pages.checkbox_page import CheckboxPage
 
-
+@pytest.mark.regression
 def test_downloads_checkbox(page):
     checkbox = CheckboxPage(page)
     checkbox.navigate()

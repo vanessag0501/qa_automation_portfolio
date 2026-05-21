@@ -25,3 +25,23 @@ def auth_headers():
         "Authorization": "Bearer test-token-123",
         "Content-Type":  "application/json"
     }
+
+@pytest.fixture(scope="session")
+def posts_endpoint(base_url):
+    return f"{base_url}/posts"
+
+@pytest.fixture(scope="session")
+def api_client(auth_headers):
+    session = requests.Session()
+    session.headers.update(auth_headers)
+    yield session
+    session.close()
+
+#Write a parametrized test in your week6 test file that hits GET /posts/{id} with 
+# at least 3 different post IDs and asserts the status code. Use your api_client 
+# and base_url fixtures alongside the parametrize decorator.
+
+@pytest.mark.parametrize("post_id", [1, 50, 100])
+def test_get_post_by_id(api_client, base_url, post_id):
+    response = api_client.get(f"{base_url}/posts/{post_id}")
+    assert response.status_code == 200, f"Expected status code 200 but got {response.status_code} for post ID {post_id}"
