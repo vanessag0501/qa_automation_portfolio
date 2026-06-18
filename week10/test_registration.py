@@ -9,7 +9,7 @@ def test_successful_registration(page):
 
     reg_page.register(
         first_name="Vanessa",
-        last_name="QATest",
+        last_name="Garcia",
         dob="1995-01-01",
         house_number="123",
         street="Main Street",
@@ -19,7 +19,7 @@ def test_successful_registration(page):
         country="United States of America (the)",
         phone="4075551234",
         email=f"qatest{__import__('random').randint(1000,9999)}@example.com",
-        password="WillowTrees436!"
+        password="Vx9!QaTest26"
     )
     # Expect redirect to login page after successful registration
     expect(page).to_have_url("https://practicesoftwaretesting.com/auth/login")
