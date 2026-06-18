@@ -2,14 +2,15 @@ import pytest
 from pages.registration_page import RegistrationPage
 from playwright.sync_api import expect
 
-@pytest.mark.local_only
+
 
 def test_page_loads(page):
     page.goto("https://practicesoftwaretesting.com/auth/register")
     page.screenshot(path="ci_page_load.png")
     print("PAGE TITLE:", page.title())
     print("PAGE URL:", page.url)
-
+    
+@pytest.mark.local_only
 def test_successful_registration(page):
     reg_page = RegistrationPage(page)
     reg_page.goto()
