@@ -1,33 +1,27 @@
 name: Playwright Tests
-
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Install dependencies
         run: |
           pip install pytest
           pip install pytest-playwright
+          pip install pytest-rerunfailures
           playwright install --with-deps chromium
-
       - name: Run Playwright tests
-        run: python -m pytest week4/ week5/ week6/ --tb=short
-
+        run: python -m pytest week4/ week5/ week6/ week10/ --tb=short
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -40,14 +34,10 @@ jobs:
   
   newman:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Install Newman
         run: npm install -g newman
-
       - name: Run Newman collection
         run: newman run week8/jsonplaceholder_collection.json -e week8/jsonplaceholder_env.json
-        
