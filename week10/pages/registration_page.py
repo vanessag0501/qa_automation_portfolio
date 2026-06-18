@@ -22,6 +22,7 @@ class RegistrationPage:
 
     def register(self, first_name, last_name, dob, house_number, street,
                     postal_code, city, state, country, phone, email, password):
+            self.page.screenshot(path="ci_before_fill.png", full_page=True)
             self.first_name.fill(first_name)
             self.last_name.fill(last_name)
             self.dob.fill(dob)
