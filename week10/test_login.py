@@ -1,9 +1,10 @@
 from playwright.sync_api import expect
+import pytest
 from pages.login_page import LoginPage
 from pages.registration_page import RegistrationPage
 import random
 
-
+@pytest.mark.local_only
 def test_successful_login(page):
     # Register a new user first so we have valid credentials
     email = f"qatest{random.randint(1000,9999)}@example.com"

@@ -19,16 +19,10 @@ class RegistrationPage:
 
     def goto(self):
         self.page.goto(self.url)
-        try:
-            self.first_name.wait_for(state="visible", timeout=15000)
-        except Exception:
-            self.page.screenshot(path="ci_timeout_failure.png", full_page=True)
-            print("PAGE CONTENT:", self.page.content()[:2000])
-            raise
+        self.first_name.wait_for(state="visible", timeout=15000)
 
     def register(self, first_name, last_name, dob, house_number, street,
                     postal_code, city, state, country, phone, email, password):
-            self.page.screenshot(path="ci_before_fill.png", full_page=True)
             self.first_name.fill(first_name)
             self.last_name.fill(last_name)
             self.dob.fill(dob)
