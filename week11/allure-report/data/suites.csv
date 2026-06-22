@@ -1,0 +1,3 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"Verifies that a new user can complete the registration form and is redirected to the login page.","4936","New customer can register successfully","","2026-06-22","passed","2026-06-22","","test_registration","",""
+"Registers a new account, then verifies the user can log in with those credentials and reach their account page.","6942","Registered user can log in successfully","","2026-06-22","passed","2026-06-22","","test_login","",""

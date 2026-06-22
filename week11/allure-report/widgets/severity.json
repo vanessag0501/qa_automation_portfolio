@@ -1,0 +1,1 @@
+[{"uid":"30dafeb4dd7cecae","name":"New customer can register successfully","time":{"start":1782151421444,"stop":1782151426380,"duration":4936},"status":"passed","severity":"critical"},{"uid":"fd3269f62a62d1d","name":"Registered user can log in successfully","time":{"start":1782151414326,"stop":1782151421268,"duration":6942},"status":"passed","severity":"critical"}]

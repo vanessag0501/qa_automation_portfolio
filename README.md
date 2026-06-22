@@ -2,9 +2,9 @@
 
 # QA Automation Portfolio
 
-Built by **Vanessa Garcia** — Software QA Tester transitioning into automation .
+Built by **Vanessa Garcia**, a Software QA Tester transitioning into automation.
 
-This repository documents a self-directed 16-week automation learning path, progressing from Python fundamentals through UI automation, API testing, SQL, performance testing, and CI/CD. It also includes a full manual testing engagement on a live e-commerce demo site.
+This repository documents a self-directed 16-week automation learning path, progressing from Python fundamentals through UI automation, API testing, SQL, performance testing, end-to-end automation, reporting, and CI/CD. It also includes a full manual testing engagement on a live e-commerce demo site.
 
 ---
 
@@ -12,7 +12,7 @@ This repository documents a self-directed 16-week automation learning path, prog
 
 | Week | Focus | Key Output |
 |------|-------|------------|
-| 1–2 | Python core | CSV test reporter that reads results and generates pass/fail summaries |
+| 1-2 | Python core | CSV test reporter that reads results and generates pass/fail summaries |
 | 3 | Playwright UI | Automated form, checkbox, and radio button tests using Page Object Model |
 | 4 | pytest structure | Full test suite with fixtures, conftest.py, custom markers, and auto-generated HTML reports |
 | 5 | API automation | CRUD, schema validation, parametrized and chained API tests |
@@ -20,35 +20,41 @@ This repository documents a self-directed 16-week automation learning path, prog
 | 7 | SQL fundamentals | SQLite database with SELECT/WHERE/ORDER BY, aggregates, JOINs, subqueries, NULL handling |
 | 8 | SQL + Postman/Newman | QA-focused data validation queries; Postman/Newman API collection integrated into CI |
 | 9 | Performance testing | Locust load tests against a live REST API with multiple user scenarios |
-| — | Manual testing project | Full manual QA engagement on the OpenCart demo storefront — test plan, test cases, bug report, and execution summary |
+| 10 | End-to-end automation | Registration and login flows automated with Page Object Model on a live e-commerce site |
+| 11 | Test reporting | Allure reports with severity levels, step breakdowns, and screenshot-on-failure attachments |
+| - | Manual testing project | Full manual QA engagement on the OpenCart demo storefront: test plan, test cases, bug report, and execution summary |
 
 ---
 
 ## Tech stack
 
-- **Python 3.13** — core language
-- **Playwright** — cross-browser UI automation
-- **pytest** — test runner, fixtures, parametrize, custom markers, HTML reports
-- **requests** — API testing
-- **SQLite** — database querying and data validation
-- **Postman / Newman** — API collection testing, integrated into CI
-- **Locust** — performance and load testing
-- **GitHub Actions** — CI/CD pipeline that runs on every push
+- **Python 3.13** for the core language
+- **Playwright** for cross-browser UI automation
+- **pytest** for the test runner, fixtures, parametrize, custom markers, and HTML reports
+- **requests** for API testing
+- **SQLite** for database querying and data validation
+- **Postman / Newman** for API collection testing, integrated into CI
+- **Locust** for performance and load testing
+- **Allure** for rich, interactive test reporting
+- **pytest-rerunfailures** for absorbing transient failures from flaky external services
+- **GitHub Actions** for the CI/CD pipelines that run on every push
 
 ---
 
 ## Framework highlights
 
-- **Page Object Model** — locators and interactions separated from test logic
-- **Data-driven testing** — parametrize with custom IDs, and CSV-driven test cases
-- **Custom markers** — `smoke` and `regression` markers for selective test runs
-- **Auth testing** — bearer tokens, basic auth, session management, 401 validation
-- **Request chaining** — multi-step API flows (create → fetch → verify → delete)
-- **SQL-based QA validation** — duplicate detection, orphaned record checks, JOIN-based data integrity queries
-- **Performance testing** — Locust scenarios covering GET and POST requests with response time and failure rate analysis
-- **Manual test documentation** — professional test plan, test case matrix, bug reports, and execution summary for a live application
-- **Auto-generated reports** — HTML test reports produced on every run
-- **CI pipeline** — tests run automatically on every push to main
+- **Page Object Model** keeps locators and interactions separated from test logic
+- **End-to-end flows** automate full registration and login journeys, including handling an address autofill race condition and breached-password validation
+- **Data-driven testing** uses parametrize with custom IDs and CSV-driven test cases
+- **Custom markers** include `smoke`, `regression`, and a `local_only` marker for tests that cannot run on CI runner IPs
+- **Auth testing** covers bearer tokens, basic auth, session management, and 401 validation
+- **Request chaining** runs multi-step API flows (create, fetch, verify, delete)
+- **SQL-based QA validation** covers duplicate detection, orphaned record checks, and JOIN-based data integrity queries
+- **Performance testing** uses Locust scenarios covering GET and POST requests with response time and failure rate analysis
+- **Allure reporting** adds severity levels, descriptive titles, labeled test steps, and automatic screenshot attachment on failure
+- **Manual test documentation** includes a professional test plan, test case matrix, bug reports, and execution summary for a live application
+- **Retry logic** uses pytest-rerunfailures so transient 503s from public test APIs do not fail the build
+- **CI pipelines** run automatically on every push to main
 
 ---
 
@@ -57,7 +63,7 @@ This repository documents a self-directed 16-week automation learning path, prog
 **Requirements**
 
 ```
-pip install requests pytest pytest-html playwright pytest-playwright locust
+pip install requests pytest pytest-html playwright pytest-playwright locust pytest-rerunfailures allure-pytest
 python -m playwright install
 ```
 
@@ -108,6 +114,36 @@ python -m locust -f locustfile.py
 
 Then open `http://localhost:8089` to configure users, spawn rate, and start the load test.
 
+**End-to-end tests (Playwright + POM)**
+
+```
+cd week10
+python -m pytest -v -m local_only
+```
+
+These tests target practicesoftwaretesting.com, which blocks CI runner IPs via Cloudflare, so they are marked `local_only` and run locally rather than in CI.
+
+**Allure reports**
+
+Requires the Allure command-line tool and Java to be installed and on PATH.
+
+```
+cd week10
+python -m pytest --alluredir=../week11/allure-results -m local_only --clean-alluredir
+allure serve ../week11/allure-results
+```
+
+---
+
+## Continuous integration
+
+Two GitHub Actions workflows run on every push and pull request to main:
+
+- **ci.yml** runs the week5 and week6 API test suites and publishes HTML reports as artifacts.
+- **playwright.yml** runs the week4, week5, week6, and week10 suites. The week10 end-to-end tests are excluded with `-m "not local_only"` because the target site blocks CI runner IPs.
+
+Each week folder runs as its own pytest invocation so each picks up its own `pytest.ini` and `conftest.py` without configuration bleeding between folders.
+
 ---
 
 ## Key files
@@ -115,23 +151,27 @@ Then open `http://localhost:8089` to configure users, spawn rate, and start the 
 | File | What it does |
 |------|----------------|
 | `week2/day10_csv_test_reporter.py` | Reads a CSV of test results, outputs a formatted execution report |
-| `week3/pages/text_box_page.py` | Page Object for DemoQA text box — locators + actions in one place |
+| `week3/pages/text_box_page.py` | Page Object for DemoQA text box, locators and actions in one place |
 | `week4/test_text_box.py` | pytest UI test using POM fixtures, parametrize, and markers |
-| `week5/test_posts_api.py` | Full API test suite — CRUD, schema, filters, 404, headers |
-| `week6/test_suite.py` | Advanced API suite — auth, sessions, fixtures, parametrize, custom markers |
+| `week5/test_posts_api.py` | Full API test suite covering CRUD, schema, filters, 404, headers |
+| `week6/test_suite.py` | Advanced API suite covering auth, sessions, fixtures, parametrize, custom markers |
 | `week7/setup_db.py` | Builds the SQLite school database used for SQL practice queries |
 | `week8/jsonplaceholder_collection.json` | Postman collection with assertions across multiple endpoints |
 | `week9/locustfile.py` | Load test simulating concurrent users against a live REST API |
+| `week10/pages/registration_page.py` | Page Object for the registration form, including address-lookup handling |
+| `week10/test_registration.py` | End-to-end registration test with Allure steps and severity |
+| `week10/test_login.py` | End-to-end login test that registers an account, logs in, and verifies the account page |
+| `week11/README.md` | How to generate and view the Allure report |
 | `opencart-manual-testing/test-plan.md` | Manual test plan for the OpenCart demo storefront |
 | `opencart-manual-testing/test-cases.xlsx` | Registration and login test cases with execution results |
 | `opencart-manual-testing/bug-report.xlsx` | Logged defects found during manual testing |
-| `.github/workflows/ci.yml` | GitHub Actions workflow — runs API tests on every push |
-| `.github/workflows/playwright.yml` | GitHub Actions workflow — runs Playwright UI tests on every push |
+| `.github/workflows/ci.yml` | GitHub Actions workflow that runs the API test suites on every push |
+| `.github/workflows/playwright.yml` | GitHub Actions workflow that runs the Playwright and API suites on every push |
 
 ---
 
 ## About
 
-I'm a QA Engineer with a B.A. in Computer Science and ITIL v4 certification, building toward a full automation engineering skill set. This portfolio represents real, runnable code and documentation written as part of a structured self-study program.
+I'm a Software QA Tester with a B.A. in Computer Science and ITIL v4 certification, building toward a full automation engineering skill set. This portfolio represents real, runnable code and documentation written as part of a structured self-study program.
 
 [LinkedIn](https://www.linkedin.com/in/vanessa-garcia-ab090314b/) · [GitHub](https://github.com/vanessag0501)
