@@ -20,6 +20,7 @@ jobs:
           pip install pytest-playwright
           pip install pytest-rerunfailures
           playwright install --with-deps chromium
+          pip install allure-pytest
       - name: Run Playwright tests
         run: |
           python -m pytest week4/ --tb=short
