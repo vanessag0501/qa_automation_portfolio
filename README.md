@@ -4,7 +4,7 @@
 
 Built by **Vanessa Garcia**, a Software QA Tester transitioning into automation.
 
-This repository documents a self-directed 16-week automation learning path, progressing from Python fundamentals through UI automation, API testing, SQL, performance testing, end-to-end automation, reporting, and CI/CD. It also includes a full manual testing engagement on a live e-commerce demo site.
+This repository documents a self-directed 16-week automation learning path, progressing from Python fundamentals through UI automation, API testing, SQL, performance testing, end-to-end automation, reporting, security testing, and CI/CD. It also includes a full manual testing engagement on a live e-commerce demo site.
 
 ---
 
@@ -22,6 +22,7 @@ This repository documents a self-directed 16-week automation learning path, prog
 | 9 | Performance testing | Locust load tests against a live REST API with multiple user scenarios |
 | 10 | End-to-end automation | Registration and login flows automated with Page Object Model on a live e-commerce site |
 | 11 | Test reporting | Allure reports with severity levels, step breakdowns, and screenshot-on-failure attachments |
+| 12 | API security testing | Multi-target security header audit that reports findings and handles unreachable targets |
 | - | Manual testing project | Full manual QA engagement on the OpenCart demo storefront: test plan, test cases, bug report, and execution summary |
 
 ---
@@ -31,7 +32,7 @@ This repository documents a self-directed 16-week automation learning path, prog
 - **Python 3.13** for the core language
 - **Playwright** for cross-browser UI automation
 - **pytest** for the test runner, fixtures, parametrize, custom markers, and HTML reports
-- **requests** for API testing
+- **requests** for API and security testing
 - **SQLite** for database querying and data validation
 - **Postman / Newman** for API collection testing, integrated into CI
 - **Locust** for performance and load testing
@@ -46,14 +47,16 @@ This repository documents a self-directed 16-week automation learning path, prog
 - **Page Object Model** keeps locators and interactions separated from test logic
 - **End-to-end flows** automate full registration and login journeys, including handling an address autofill race condition and breached-password validation
 - **Data-driven testing** uses parametrize with custom IDs and CSV-driven test cases
-- **Custom markers** include `smoke`, `regression`, and a `local_only` marker for tests that cannot run on CI runner IPs
+- **Custom markers** include `smoke`, `regression`, `security`, and a `local_only` marker for tests that cannot run on CI runner IPs
 - **Auth testing** covers bearer tokens, basic auth, session management, and 401 validation
 - **Request chaining** runs multi-step API flows (create, fetch, verify, delete)
 - **SQL-based QA validation** covers duplicate detection, orphaned record checks, and JOIN-based data integrity queries
 - **Performance testing** uses Locust scenarios covering GET and POST requests with response time and failure rate analysis
 - **Allure reporting** adds severity levels, descriptive titles, labeled test steps, and automatic screenshot attachment on failure
+- **Security auditing** checks HTTP security headers across multiple targets and reports findings rather than failing on weak security
+- **External-service resilience** skips tests that depend on a third-party service when it returns a 503, so outages do not fail the build
 - **Manual test documentation** includes a professional test plan, test case matrix, bug reports, and execution summary for a live application
-- **Retry logic** uses pytest-rerunfailures so transient 503s from public test APIs do not fail the build
+- **Retry logic** uses pytest-rerunfailures so transient errors from public test APIs do not fail the build
 - **CI pipelines** run automatically on every push to main
 
 ---
@@ -133,6 +136,15 @@ python -m pytest --alluredir=../week11/allure-results -m local_only --clean-allu
 allure serve ../week11/allure-results
 ```
 
+**Security header audit**
+
+```
+cd week12
+python -m pytest test_security.py -v -m security -s
+```
+
+Results are written to `week12/security_audit_report.md`.
+
 ---
 
 ## Continuous integration
@@ -140,9 +152,9 @@ allure serve ../week11/allure-results
 Two GitHub Actions workflows run on every push and pull request to main:
 
 - **ci.yml** runs the week5 and week6 API test suites and publishes HTML reports as artifacts.
-- **playwright.yml** runs the week4, week5, week6, and week10 suites. The week10 end-to-end tests are excluded with `-m "not local_only"` because the target site blocks CI runner IPs.
+- **playwright.yml** runs the week4, week5, and week6 suites.
 
-Each week folder runs as its own pytest invocation so each picks up its own `pytest.ini` and `conftest.py` without configuration bleeding between folders.
+Each week folder runs as its own pytest invocation so each picks up its own `pytest.ini` and `conftest.py` without configuration bleeding between folders. Tests that depend on external services skip gracefully when those services are unavailable, so third-party outages do not turn the pipeline red.
 
 ---
 
@@ -162,9 +174,12 @@ Each week folder runs as its own pytest invocation so each picks up its own `pyt
 | `week10/test_registration.py` | End-to-end registration test with Allure steps and severity |
 | `week10/test_login.py` | End-to-end login test that registers an account, logs in, and verifies the account page |
 | `week11/README.md` | How to generate and view the Allure report |
+| `week12/test_security.py` | Multi-target security header audit with findings report |
+| `week12/security_audit_report.md` | Generated audit report comparing a secured site to a minimal one |
 | `opencart-manual-testing/test-plan.md` | Manual test plan for the OpenCart demo storefront |
 | `opencart-manual-testing/test-cases.xlsx` | Registration and login test cases with execution results |
 | `opencart-manual-testing/bug-report.xlsx` | Logged defects found during manual testing |
+| `BUGS.md` | Log of application defects and technical issues found across the portfolio |
 | `.github/workflows/ci.yml` | GitHub Actions workflow that runs the API test suites on every push |
 | `.github/workflows/playwright.yml` | GitHub Actions workflow that runs the Playwright and API suites on every push |
 
