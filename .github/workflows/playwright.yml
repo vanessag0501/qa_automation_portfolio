@@ -26,6 +26,7 @@ jobs:
           python -m pytest week4/ --tb=short
           python -m pytest week5/ --tb=short
           python -m pytest week6/ --tb=short
+          python -m pytest week13/ --tb=short
           
       - name: Upload test results
         if: always()
