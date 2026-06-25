@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+
+# pytest
+.pytest_cache/
+
+# Allure build output
+**/allure-results/
+**/allure-report/
+
+# Generated reports
+**/report.html
+
+# Debug screenshots
+**/*_failure.png
+after_register*.png
+before_click.png
+ci_*.png
+
+# OS / editor
+.vscode/
+.DS_Store
