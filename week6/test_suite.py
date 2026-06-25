@@ -4,26 +4,37 @@ import pytest
 import csv
 
 # ── Auth tests ────────────────────────────────────────────────────────
+
+def skip_if_unavailable(response):
+    """Skip the test if the external service is down (503)."""
+    if response.status_code == 503:
+        pytest.skip("httpbin.org returned 503 (service unavailable)")
+        
 @pytest.mark.regression
 def test_bearer_auth(http_url, auth_headers):
     response = requests.get(f"{http_url}/headers", headers=auth_headers)
+    skip_if_unavailable(response)
     assert response.status_code == 200
     received = response.json()["headers"]
     assert "Authorization" in received
+
 
 def test_basic_auth_pass(http_url):
     response = requests.get(
         f"{http_url}/basic-auth/vanessa/password123",
         auth=("vanessa", "password123")
     )
+    skip_if_unavailable(response)
     assert response.status_code == 200
     assert response.json()["authenticated"] == True
+
 
 def test_basic_auth_fail(http_url):
     response = requests.get(
         f"{http_url}/basic-auth/vanessa/password123",
         auth=("vanessa", "wrongpassword")
     )
+    skip_if_unavailable(response)
     assert response.status_code == 401
 
 # ── CRUD tests ────────────────────────────────────────────────────────
