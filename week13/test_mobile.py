@@ -1,6 +1,5 @@
 import pytest
 
-
 @pytest.mark.mobile
 def test_mobile_page_loads(mobile_page):
     """The login page loads and the login button is visible on mobile."""
@@ -34,7 +33,6 @@ def test_mobile_login_and_menu(mobile_page):
     # The logout link inside the menu should now be visible
     logout_link = mobile_page.locator("#logout_sidebar_link")
     assert logout_link.is_visible(), "Logout link should appear after opening the menu"
-
 
 @pytest.mark.mobile
 def test_mobile_add_to_cart(mobile_page):
